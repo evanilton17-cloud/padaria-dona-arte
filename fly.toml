@@ -8,6 +8,9 @@ primary_region = 'gru'
 
 [build]
 
+[env]
+  PORT = '8080'
+
 [[mounts]]
   source = 'padaria_data'
   destination = '/app/data'
