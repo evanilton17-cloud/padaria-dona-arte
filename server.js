@@ -8,10 +8,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'data', 'uploads')));
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, 'uploads'),
+  destination: path.join(__dirname, 'data', 'uploads'),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname) || '.jpg';
     cb(null, Date.now() + '-' + crypto.randomBytes(4).toString('hex') + ext);

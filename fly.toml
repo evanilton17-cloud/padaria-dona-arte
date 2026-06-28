@@ -1,15 +1,22 @@
-app = "padaria-dona-arte"
+# fly.toml app configuration file generated for padaria-teste on 2026-06-28T14:12:53-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'padaria-teste'
+primary_region = 'gru'
 
 [build]
+
+[[mounts]]
+  source = 'padaria_data'
+  destination = '/app/data'
 
 [http_service]
   internal_port = 8080
   force_https = true
 
-[[mounts]]
-  source = "padaria_data"
-  destination = "/app/data"
-
-[[mounts]]
-  source = "padaria_uploads"
-  destination = "/app/uploads"
+[[vm]]
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024
