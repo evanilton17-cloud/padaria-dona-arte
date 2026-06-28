@@ -1,11 +1,12 @@
 {
-  "name": "padaria-dona-arte",
+  "name": "padaria-online",
   "version": "1.0.0",
-  "description": "Sistema completo para Padaria Dona Arte",
+  "description": "Sistema de cardápio online e gestão de pedidos para padarias",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "setup": "powershell -File setup.ps1"
   },
   "dependencies": {
     "express": "^4.18.0",

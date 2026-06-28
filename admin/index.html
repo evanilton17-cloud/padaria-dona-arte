@@ -116,8 +116,14 @@
     .product-img-show { width: 100%; height: 100%; object-fit: cover; }
     .admin-link { position: fixed; bottom: 1rem; left: 1rem; background: var(--brown); color: var(--cream); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; text-decoration: none; z-index: 999; opacity: 0.5; }
     .admin-link:hover { opacity: 1; }
+    .hamburger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--brown); padding: 0.2rem; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 49; }
+    .sidebar.open { transform: translateX(0); }
     @media(max-width:768px) {
-      .sidebar { display: none; }
+      .hamburger { display: block; }
+      .sidebar-overlay.open { display: block; }
+      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; width: 240px; z-index: 60; }
+      .sidebar.open { transform: translateX(0); }
       .main { margin-left: 0; padding: 1rem; }
     }
   </style>
@@ -155,12 +161,13 @@
     v1.0 · Padaria Dona Arte
   </div>
 </aside>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <main class="main">
 
 <div class="page active" id="page-dashboard">
   <div class="topbar">
-    <div><div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.2rem;">Bom dia, Dona Arte 👋</div><h1>Dashboard</h1></div>
+    <div style="display:flex;align-items:center;gap:0.8rem;"><button class="hamburger" onclick="toggleSidebar()">☰</button><div><div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.2rem;">Bom dia, Dona Arte 👋</div><h1>Dashboard</h1></div></div>
     <div class="topbar-right"><span style="font-size:0.82rem;color:var(--muted)" id="clockDisplay"></span></div>
   </div>
   <div class="cards-row">
@@ -380,11 +387,17 @@ function startAutoRefresh() {
   refreshInterval = setInterval(checkNewOrders, 10000);
 }
 
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
 function goTo(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   if (el) el.classList.add('active');
+  if (window.innerWidth <= 768) { document.querySelector('.sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
   if (page === 'dashboard') renderDashboard();
   if (page === 'pedidos') renderPedidos();
   if (page === 'produtos') renderProductsAdmin();
@@ -473,10 +486,29 @@ function openOrderModal(id) {
       ${o.items.map(i => '<div class="order-item-row"><span>'+i.qty+'× '+i.name+'</span><span>R$ '+(i.qty*i.price).toFixed(2).replace('.',',')+'</span></div>').join('')}
       <div class="order-total-row"><span>Total</span><span>R$ '+o.total.toFixed(2).replace('.',',')+'</span></div>
     </div>
-    ${o.status !== 'delivered' ? '<div style="margin-top:1.2rem;display:flex;gap:0.8rem;justify-content:flex-end"><button class="btn btn-gold" onclick="advanceOrder(\''+o.id+'\');closeOrderModal()">'+statusNextLabel[o.status]+'</button></div>' : ''}`;
+      <div style="margin-top:1.2rem;display:flex;gap:0.8rem;justify-content:flex-end;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="whatsAppOrder('${o.id}')">📱 Enviar via WhatsApp</button>
+        ${o.status !== 'delivered' ? '<button class="btn btn-gold" onclick="advanceOrder(\''+o.id+'\');closeOrderModal()">'+statusNextLabel[o.status]+'</button>' : ''}
+      </div>`;
   document.getElementById('orderModal').classList.add('open');
 }
 function closeOrderModal() { document.getElementById('orderModal').classList.remove('open'); }
+
+function whatsAppOrder(id) {
+  const o = orders.find(x => x.id == id);
+  if (!o) return;
+  const items = o.items.map(i => '• ' + i.qty + '× ' + i.name + ' = R$ ' + (i.qty * i.price).toFixed(2).replace('.',',')).join('%0A');
+  const msg = '🛵 *Novo pedido #' + o.id + '*%0A%0A'
+    + '👤 ' + o.client + '%0A'
+    + '📞 ' + o.phone + '%0A'
+    + '📍 ' + o.type + (o.address && o.address !== '–' ? ': ' + o.address : '') + '%0A'
+    + '💳 ' + o.pay + '%0A'
+    + '⏰ ' + o.time + '%0A%0A'
+    + '*Itens:*%0A' + items + '%0A%0A'
+    + '*Total: R$ ' + o.total.toFixed(2).replace('.',',') + '*'
+    + (o.obs ? '%0A%0A📝 ' + o.obs : '');
+  window.open('https://wa.me/55' + o.phone.replace(/\D/g, '') + '?text=' + msg, '_blank');
+}
 
 // PRODUTOS
 async function renderProductsAdmin() {

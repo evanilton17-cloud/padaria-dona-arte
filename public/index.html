@@ -147,6 +147,11 @@
     .ribbon { background: var(--gold); color: var(--brown); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; }
     .ribbon-track { display: inline-flex; gap: 3rem; animation: scroll-ribbon 22s linear infinite; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
     @keyframes scroll-ribbon { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .spinner-wrap { display: flex; align-items: center; justify-content: center; padding: 4rem 0; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--cream-dark); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .delivery-info { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+    .delivery-info strong { color: var(--brown); }
     @media (max-width: 768px) {
       nav { padding: 1rem 1.2rem; }
       .nav-links { display: none; }
@@ -191,6 +196,7 @@
     <p class="section-sub">Produzido diariamente a partir das 5h da manhã. Retirada na loja ou entrega.</p>
   </div>
   <div class="category-tabs" id="categoryTabs"></div>
+  <div class="spinner-wrap" id="prodSpinner"><div class="spinner"></div></div>
   <div class="products-grid" id="productsGrid"></div>
 </section>
 
@@ -247,7 +253,11 @@
         </select>
       </div>
       <div id="addressFields" style="display:none;">
-        <div class="form-group"><label>Endereço completo</label><input type="text" id="fEnd" placeholder="Rua, número, bairro" /></div>
+        <div class="form-group"><label>Endereço completo</label><input type="text" id="fEnd" placeholder="Rua, número, bairro" oninput="updateDeliveryFee()"/></div>
+      </div>
+      <div id="deliveryFeeDisplay" style="display:none;margin-bottom:0.8rem;padding:0.6rem;background:var(--cream);border-radius:8px;font-size:0.82rem;color:var(--muted);">
+        <span>Taxa de entrega: <strong id="deliveryFeeValue">R$ 0,00</strong></span>
+        <span id="deliveryFreeMsg" style="display:none;color:var(--green);font-weight:600;margin-left:0.5rem;">🎉 Grátis!</span>
       </div>
       <div class="form-group"><label>Observações</label><textarea id="fObs" rows="2" placeholder="Sem açúcar, troco para R$50..."></textarea></div>
       <div class="modal-total">
@@ -292,20 +302,23 @@ async function api(path, opts = {}) {
   return res.json();
 }
 
+let storeSettings = null;
+
 async function loadData() {
   products = await api('/api/products');
   categories = await api('/api/categories');
-  const settings = await api('/api/settings');
+  storeSettings = await api('/api/settings');
   const horarios = await api('/api/horarios');
   document.getElementById('totalProdutos').textContent = products.length;
-  document.getElementById('footerInfo').textContent = `📍 ${settings.address}  |  📞 ${settings.whatsapp}  |  ⏰ Seg–Sáb 6h–19h`;
-  const wpp = settings.whatsapp.replace(/\D/g, '');
+  document.getElementById('footerInfo').textContent = `📍 ${storeSettings.address}  |  📞 ${storeSettings.whatsapp}  |  ⏰ Seg–Sáb 6h–19h`;
+  const wpp = storeSettings.whatsapp.replace(/\D/g, '');
   document.getElementById('whatsAppLink').href = 'https://wa.me/55' + wpp + '?text=Olá!%20Gostaria%20de%20fazer%20um%20pedido%20🥖';
-  if (settings.pixKey) {
-    pixData = settings;
-    document.getElementById('pixKeyDisplay').textContent = settings.pixKey;
-    document.getElementById('pixNameDisplay').textContent = (settings.pixName || '') + (settings.pixBank ? ' — ' + settings.pixBank : '');
+  if (storeSettings.pixKey) {
+    pixData = storeSettings;
+    document.getElementById('pixKeyDisplay').textContent = storeSettings.pixKey;
+    document.getElementById('pixNameDisplay').textContent = (storeSettings.pixName || '') + (storeSettings.pixBank ? ' — ' + storeSettings.pixBank : '');
   }
+  document.getElementById('prodSpinner').style.display = 'none';
   renderStatus(horarios);
   renderTabs();
   renderProducts();
@@ -385,6 +398,7 @@ function updateCartUI() {
   document.getElementById('cartSubtotal').textContent = 'R$ ' + price.toFixed(2).replace('.',',');
   document.getElementById('cartTotalDisplay').textContent = 'R$ ' + price.toFixed(2).replace('.',',');
   document.getElementById('modalTotal').textContent = 'R$ ' + price.toFixed(2).replace('.',',');
+  updateDeliveryFee();
   const cartItemsEl = document.getElementById('cartItems');
   const cartFooter = document.getElementById('cartFooter');
   if (Object.keys(cart).length === 0) {
@@ -431,7 +445,28 @@ function closeCheckout() {
   document.getElementById('checkoutForm').style.display = 'block';
   document.getElementById('successScreen').classList.remove('show');
 }
-function toggleAddress() { document.getElementById('addressFields').style.display = document.getElementById('fEntrega').value === 'entrega' ? 'block' : 'none'; }
+function toggleAddress() {
+  const isDelivery = document.getElementById('fEntrega').value === 'entrega';
+  document.getElementById('addressFields').style.display = isDelivery ? 'block' : 'none';
+  updateDeliveryFee();
+}
+
+function updateDeliveryFee() {
+  const isDelivery = document.getElementById('fEntrega').value === 'entrega';
+  const el = document.getElementById('deliveryFeeDisplay');
+  if (!isDelivery || !storeSettings) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  const fee = storeSettings.deliveryFee || 0;
+  const freeFrom = storeSettings.freeDeliveryFrom || 0;
+  const subtotal = Object.keys(cart).reduce((s, id) => { const p = products.find(x => x.id == id); return s + (p ? p.price * cart[id] : 0); }, 0);
+  if (freeFrom > 0 && subtotal >= freeFrom) {
+    document.getElementById('deliveryFeeValue').textContent = 'R$ 0,00';
+    document.getElementById('deliveryFreeMsg').style.display = 'inline';
+  } else {
+    document.getElementById('deliveryFeeValue').textContent = 'R$ ' + fee.toFixed(2).replace('.',',');
+    document.getElementById('deliveryFreeMsg').style.display = 'none';
+  }
+}
 function selectPay(el) {
   document.querySelectorAll('.pay-option').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
@@ -461,9 +496,14 @@ async function submitOrder() {
     const p = products.find(x => x.id == id);
     return { name: p.name, qty: cart[id], price: p.price };
   });
-  const total = items.reduce((s, i) => s + i.qty * i.price, 0);
   const type = document.getElementById('fEntrega').value === 'entrega' ? 'Entrega' : 'Retirada';
   const address = type === 'Entrega' ? document.getElementById('fEnd').value.trim() : '–';
+  let total = items.reduce((s, i) => s + i.qty * i.price, 0);
+  if (type === 'Entrega' && storeSettings) {
+    const fee = storeSettings.deliveryFee || 0;
+    const freeFrom = storeSettings.freeDeliveryFrom || 0;
+    if (!(freeFrom > 0 && total >= freeFrom)) total += fee;
+  }
   const obs = document.getElementById('fObs').value.trim();
   try {
     const order = await api('/api/orders', {
