@@ -1,0 +1,284 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Pão Francês",
+      "cat": "Pães",
+      "emoji": "🥖",
+      "desc": "Crocante por fora, macio por dentro. O clássico de todo dia.",
+      "price": 0.75,
+      "unit": "unidade",
+      "available": true
+    },
+    {
+      "id": 2,
+      "name": "Pão de Forma Integral",
+      "cat": "Pães",
+      "emoji": "🍞",
+      "desc": "Com sementes de gergelim e linhaça. Fatias perfeitas.",
+      "price": 16.9,
+      "unit": "pacote",
+      "badge": "Novo",
+      "available": true
+    },
+    {
+      "id": 3,
+      "name": "Baguete Artesanal",
+      "cat": "Pães",
+      "emoji": "🥐",
+      "desc": "Fermentação longa de 18h. Crosta caramelizada, miolo alveolado.",
+      "price": 12.5,
+      "unit": "unidade",
+      "available": true
+    },
+    {
+      "id": 4,
+      "name": "Croissant Manteiga",
+      "cat": "Pães",
+      "emoji": "🥐",
+      "desc": "Folhados com manteiga francesa. Assados às 6h.",
+      "price": 9.9,
+      "unit": "unidade",
+      "badge": "Destaque",
+      "available": true
+    },
+    {
+      "id": 5,
+      "name": "Bolo de Cenoura",
+      "cat": "Bolos",
+      "emoji": "🎂",
+      "desc": "Com cobertura de ganache de chocolate 70%. Receita da Dona Arte.",
+      "price": 49.9,
+      "unit": "inteiro",
+      "available": true
+    },
+    {
+      "id": 6,
+      "name": "Bolo de Laranja",
+      "cat": "Bolos",
+      "emoji": "🍊",
+      "desc": "Casca ralada na hora. Calda úmida de suco natural.",
+      "price": 42,
+      "unit": "inteiro",
+      "available": true
+    },
+    {
+      "id": 7,
+      "name": "Cupcake Chocolate",
+      "cat": "Bolos",
+      "emoji": "🧁",
+      "desc": "Massa fudge com cream cheese de baunilha.",
+      "price": 8.5,
+      "unit": "unidade",
+      "badge": "Novo",
+      "available": true
+    },
+    {
+      "id": 8,
+      "name": "Pão de Queijo GG",
+      "cat": "Salgados",
+      "emoji": "🧀",
+      "desc": "Receita mineira com queijo canastra. 80g cada.",
+      "price": 5.5,
+      "unit": "unidade",
+      "available": true
+    },
+    {
+      "id": 9,
+      "name": "Enroladinho Presunto",
+      "cat": "Salgados",
+      "emoji": "🌮",
+      "desc": "Massa fofa recheada com presunto e queijo mussarela.",
+      "price": 4.5,
+      "unit": "unidade",
+      "available": true
+    },
+    {
+      "id": 10,
+      "name": "Esfiha Aberta",
+      "cat": "Salgados",
+      "emoji": "🫓",
+      "desc": "Carne temperada com especiarias libanesas. Assada na hora.",
+      "price": 5,
+      "unit": "unidade",
+      "badge": "Destaque",
+      "available": true
+    },
+    {
+      "id": 11,
+      "name": "Café Coado",
+      "cat": "Bebidas",
+      "emoji": "☕",
+      "desc": "Blend especial torrado semanalmente pela nossa família.",
+      "price": 6,
+      "unit": "copo",
+      "available": true
+    },
+    {
+      "id": 12,
+      "name": "Cappuccino Artesanal",
+      "cat": "Bebidas",
+      "emoji": "☕",
+      "desc": "Leite vaporizado com espresso duplo e canela.",
+      "price": 9,
+      "unit": "copo",
+      "available": true
+    },
+    {
+      "id": 13,
+      "name": "Suco de Laranja",
+      "cat": "Bebidas",
+      "emoji": "🍊",
+      "desc": "100% natural, espremido na hora. 500ml.",
+      "price": 8,
+      "unit": "copo",
+      "available": true
+    },
+    {
+      "id": 14,
+      "name": "Palitinhos de chocolate",
+      "cat": "Salgados",
+      "price": 14,
+      "unit": "kg",
+      "emoji": "🍞",
+      "desc": "Palitinho de chocolate, feito",
+      "available": true
+    },
+    {
+      "id": 15,
+      "name": "Bolinho de Chuva",
+      "cat": "Bolos",
+      "price": 25,
+      "unit": "kg",
+      "emoji": "🍞",
+      "badge": "Voce vai amar, vai se sentir nas nuvens",
+      "image": "/uploads/1782665038905-64b0811a.png",
+      "desc": "",
+      "available": true
+    }
+  ],
+  "categories": [
+    "Pães",
+    "Bolos",
+    "Salgados",
+    "Bebidas"
+  ],
+  "orders": [
+    {
+      "id": "1004",
+      "client": "anderson",
+      "phone": "69993124543",
+      "type": "Retirada",
+      "address": "–",
+      "items": [
+        {
+          "name": "Pão Francês",
+          "qty": 1,
+          "price": 0.75
+        }
+      ],
+      "pay": "Dinheiro",
+      "total": 0.75,
+      "obs": "",
+      "status": "pending",
+      "time": "14:04",
+      "createdAt": "2026-06-28T17:04:46.926Z"
+    },
+    {
+      "id": "1003",
+      "client": "edivaldo",
+      "phone": "69993124541",
+      "type": "Retirada",
+      "address": "–",
+      "items": [
+        {
+          "name": "Pão Francês",
+          "qty": 1,
+          "price": 0.75
+        },
+        {
+          "name": "Pão de Forma Integral",
+          "qty": 1,
+          "price": 16.9
+        },
+        {
+          "name": "Baguete Artesanal",
+          "qty": 1,
+          "price": 12.5
+        },
+        {
+          "name": "Bolo de Cenoura",
+          "qty": 1,
+          "price": 49.9
+        }
+      ],
+      "pay": "Dinheiro",
+      "total": 80.05,
+      "obs": "",
+      "status": "pending",
+      "time": "13:57",
+      "createdAt": "2026-06-28T16:57:12.992Z"
+    }
+  ],
+  "storeSettings": {
+    "name": "Evanilton de Souza Ribeiro",
+    "cnpj": "12.345.678/0001-90",
+    "whatsapp": "69993124541",
+    "phone": "69993124541",
+    "address": "Mario andreazza 520",
+    "description": "Pão com alma, feito com amor. Tradição artesanal desde 1987.",
+    "deliveryFee": 5,
+    "minOrder": 15,
+    "freeDeliveryFrom": 40,
+    "deliveryRadius": 5,
+    "adminPassword": "admin123",
+    "pixBank": "Nubank",
+    "pixKey": "evanilton@email.com",
+    "pixName": "Evanilton de Souza Ribeiro"
+  },
+  "horarios": [
+    {
+      "day": "Segunda",
+      "open": "06:00",
+      "close": "19:00",
+      "active": true
+    },
+    {
+      "day": "Terça",
+      "open": "06:00",
+      "close": "19:00",
+      "active": true
+    },
+    {
+      "day": "Quarta",
+      "open": "06:00",
+      "close": "19:00",
+      "active": true
+    },
+    {
+      "day": "Quinta",
+      "open": "06:00",
+      "close": "19:00",
+      "active": true
+    },
+    {
+      "day": "Sexta",
+      "open": "06:00",
+      "close": "19:00",
+      "active": true
+    },
+    {
+      "day": "Sábado",
+      "open": "06:00",
+      "close": "14:00",
+      "active": true
+    },
+    {
+      "day": "Domingo",
+      "open": "06:00",
+      "close": "12:00",
+      "active": false
+    }
+  ],
+  "orderCounter": 1004
+}

@@ -1,0 +1,15 @@
+app = "padaria-dona-arte"
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+
+[[mounts]]
+  source = "padaria_data"
+  destination = "/app/data"
+
+[[mounts]]
+  source = "padaria_uploads"
+  destination = "/app/uploads"
