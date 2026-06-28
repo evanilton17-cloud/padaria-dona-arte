@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel Admin – Padaria Dona Arte</title>
+  <title id="adminTitle">Painel Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
@@ -141,7 +141,7 @@
 </div>
 
 <aside class="sidebar">
-  <div class="sidebar-logo"><h2>🥖 Dona <span>Arte</span></h2><p>Painel Administrativo</p></div>
+  <div class="sidebar-logo"><h2>🥖 <span id="adminLogo1">Padaria</span> <span id="adminLogo2">Online</span></h2><p>Painel Administrativo</p></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Principal</div>
     <button class="nav-item active" onclick="goTo('dashboard', this)"><span class="icon">📊</span> Dashboard</button>
@@ -158,7 +158,7 @@
       <a href="/" target="_blank" style="color:var(--gold);text-decoration:none;font-size:0.78rem;">↗ Ver site público</a>
       <span onclick="doLogout()" style="color:var(--red);font-size:0.78rem;cursor:pointer;">🚪 Sair</span>
     </div>
-    v1.0 · Padaria Dona Arte
+    v1.0 · <span id="adminFooterName">Padaria Online</span>
   </div>
 </aside>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -167,7 +167,7 @@
 
 <div class="page active" id="page-dashboard">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:0.8rem;"><button class="hamburger" onclick="toggleSidebar()">☰</button><div><div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.2rem;">Bom dia, Dona Arte 👋</div><h1>Dashboard</h1></div></div>
+    <div style="display:flex;align-items:center;gap:0.8rem;"><button class="hamburger" onclick="toggleSidebar()">☰</button><div><div id="adminGreeting" style="font-size:0.75rem;color:var(--muted);margin-bottom:0.2rem;">Bem-vindo 👋</div><h1>Dashboard</h1></div></div>
     <div class="topbar-right"><span style="font-size:0.82rem;color:var(--muted)" id="clockDisplay"></span></div>
   </div>
   <div class="cards-row">
@@ -332,11 +332,30 @@ function doLogout() {
   document.getElementById('loginPassword').value = '';
 }
 
+function updateBranding(settings) {
+  const name = settings.name || 'Padaria Online';
+  const desc = settings.description || 'Painel Administrativo';
+  document.getElementById('adminTitle').textContent = 'Painel Admin – ' + name;
+  const nameParts = name.split(' ');
+  const mid = Math.ceil(nameParts.length / 2);
+  document.getElementById('adminLogo1').textContent = nameParts.slice(0, mid).join(' ');
+  document.getElementById('adminLogo2').textContent = nameParts.slice(mid).join(' ');
+  document.getElementById('adminFooterName').textContent = name;
+  const now = new Date();
+  const hour = now.getHours();
+  let greeting = 'Bom dia';
+  if (hour >= 12 && hour < 18) greeting = 'Boa tarde';
+  else if (hour >= 18) greeting = 'Boa noite';
+  document.getElementById('adminGreeting').textContent = greeting + ', ' + name.split(' ')[0] + ' 👋';
+}
+
 async function loadAll() {
   products = await api('/api/products');
   categories = await api('/api/categories');
   orders = await api('/api/orders');
   horarios = await api('/api/horarios');
+  const settings = await api('/api/settings');
+  updateBranding(settings);
   renderDashboard();
   renderPedidos();
   renderProductsAdmin();

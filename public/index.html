@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Padaria Dona Arte – Pães Artesanais</title>
+  <title id="pageTitle">Padaria Online</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -164,7 +164,7 @@
 </head>
 <body>
 <nav>
-  <div class="nav-logo">🥖 Dona <span>Arte</span></div>
+  <div class="nav-logo" id="navLogo">🥖 <span id="storeName1">Padaria</span> <span id="storeName2">Online</span></div>
   <div class="nav-links"><a href="#cardapio">Cardápio</a><a href="#sobre">Nossa História</a><a href="#contato">Contato</a></div>
   <div style="display:flex;align-items:center;gap:0.8rem;">
     <span id="statusBadge" style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:50px;display:flex;align-items:center;gap:0.35rem;"></span>
@@ -173,9 +173,9 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-badge">✦ Desde 1987 – Tradição Artesanal</div>
-  <h1>Pão com <em>alma</em>,<br>feito com amor</h1>
-  <p>Cada fornada nasce das mãos de quem aprendeu com a avó. Ingredientes honestos, receitas de família.</p>
+  <div class="hero-badge" id="heroBadge">✦ Tradição Artesanal</div>
+  <h1 id="heroTitle">Padaria <em>Online</em></h1>
+  <p id="heroSub">Seu cardápio digital, feito com carinho.</p>
   <div class="hero-cta">
     <button class="btn-primary" onclick="document.getElementById('cardapio').scrollIntoView({behavior:'smooth'})">Ver Cardápio</button>
     <button class="btn-ghost" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">Nossa História</button>
@@ -204,8 +204,8 @@
   <div id="sobre">
     <div class="sobre-text">
       <div class="section-label" style="color:var(--gold);">✦ Nossa História</div>
-      <h2 class="section-title" style="color:var(--cream);">Da família Oliveira<br>para a sua mesa</h2>
-      <p>Em 1987, Dona Artemísia abriu as portas com uma única receita de pão francês e um forno a lenha. Hoje, três gerações depois, a mesma massa fermenta no mesmo canto da cidade.</p>
+      <h2 class="section-title" style="color:var(--cream);" id="aboutTitle">Nossa história</h2>
+      <p id="aboutStory">Tradição e qualidade que fazem a diferença há gerações.</p>
       <div class="sobre-list">
         <div class="sobre-item"><div class="sobre-icon">🌾</div><div><h4>Farinha selecionada</h4><p>Trabalhamos apenas com moinhos regionais que cultivam trigo sem agrotóxicos.</p></div></div>
         <div class="sobre-item"><div class="sobre-icon">🔥</div><div><h4>Forno a lenha original</h4><p>O mesmo forno de 1987 ainda aquece cada fornada com a temperatura certa.</p></div></div>
@@ -221,7 +221,7 @@
   <p style="margin-top:0.8rem;" id="footerWhatsApp">
     <a id="whatsAppLink" href="#" target="_blank" style="color:var(--gold);text-decoration:none;font-weight:600;">📱 Peça pelo WhatsApp</a>
   </p>
-  <p style="margin-top:0.5rem;">© 2025 <strong>Padaria Dona Arte</strong>. Feito com farinha, amor e um toque de ouro.</p>
+  <p style="margin-top:0.5rem;">© 2025 <strong id="footerStoreName">Padaria Online</strong>. Feito com carinho.</p>
 </footer>
 
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -309,6 +309,19 @@ async function loadData() {
   categories = await api('/api/categories');
   storeSettings = await api('/api/settings');
   const horarios = await api('/api/horarios');
+  const name = storeSettings.name || 'Padaria Online';
+  const desc = storeSettings.description || 'Seu cardápio digital';
+  document.title = name;
+  const nameParts = name.split(' ');
+  const mid = Math.ceil(nameParts.length / 2);
+  document.getElementById('storeName1').textContent = nameParts.slice(0, mid).join(' ');
+  document.getElementById('storeName2').textContent = nameParts.slice(mid).join(' ');
+  document.getElementById('heroTitle').innerHTML = desc.replace(/(\w+)$/, '<em>$1</em>');
+  document.getElementById('heroSub').textContent = 'Tudo fresquinho, feito com carinho.';
+  document.getElementById('heroBadge').textContent = '✦ ' + name;
+  document.getElementById('aboutTitle').innerHTML = name + '<br>desde sempre';
+  document.getElementById('aboutStory').textContent = 'Tradição e qualidade que fazem a diferença. ' + desc + '.';
+  document.getElementById('footerStoreName').textContent = name;
   document.getElementById('totalProdutos').textContent = products.length;
   document.getElementById('footerInfo').textContent = `📍 ${storeSettings.address}  |  📞 ${storeSettings.whatsapp}  |  ⏰ Seg–Sáb 6h–19h`;
   const wpp = storeSettings.whatsapp.replace(/\D/g, '');

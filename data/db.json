@@ -221,20 +221,20 @@
     }
   ],
   "storeSettings": {
-    "name": "Evanilton de Souza Ribeiro",
-    "cnpj": "12.345.678/0001-90",
-    "whatsapp": "69993124541",
-    "phone": "69993124541",
-    "address": "Mario andreazza 520",
-    "description": "Pão com alma, feito com amor. Tradição artesanal desde 1987.",
+    "name": "Padaria Dona Arte",
+    "cnpj": "",
+    "whatsapp": "5511999999999",
+    "phone": "5511999999999",
+    "address": "Sua rua, 123 — Bairro, Cidade",
+    "description": "Pão com alma, feito com amor.",
     "deliveryFee": 5,
     "minOrder": 15,
     "freeDeliveryFrom": 40,
     "deliveryRadius": 5,
     "adminPassword": "admin123",
-    "pixBank": "Nubank",
-    "pixKey": "evanilton@email.com",
-    "pixName": "Evanilton de Souza Ribeiro"
+    "pixBank": "Seu banco",
+    "pixKey": "sua@chavepix.com",
+    "pixName": "Seu nome ou CNPJ"
   },
   "horarios": [
     {

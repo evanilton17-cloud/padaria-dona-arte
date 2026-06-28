@@ -33,6 +33,7 @@ function initDB() {
       storeSettings: {
         name: "Padaria Dona Arte", cnpj: "", whatsapp: "", phone: "",
         address: "", description: "Pão com alma, feito com amor.",
+        pixKey: "", pixName: "", pixBank: "",
         adminPassword: "admin123", deliveryFee: 5, minOrder: 15, freeDeliveryFrom: 40, deliveryRadius: 5
       },
       horarios: [
