@@ -22,6 +22,34 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 const adminTokens = new Set();
 
+function initDB() {
+  const dir = path.dirname(DB_PATH);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const uploadDir = path.join(dir, 'uploads');
+  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+  if (!fs.existsSync(DB_PATH)) {
+    fs.writeFileSync(DB_PATH, JSON.stringify({
+      products: [], categories: [], orders: [],
+      storeSettings: {
+        name: "Padaria Dona Arte", cnpj: "", whatsapp: "", phone: "",
+        address: "", description: "Pão com alma, feito com amor.",
+        adminPassword: "admin123", deliveryFee: 5, minOrder: 15, freeDeliveryFrom: 40, deliveryRadius: 5
+      },
+      horarios: [
+        { day: 'Segunda', open: '06:00', close: '19:00', active: true },
+        { day: 'Terça', open: '06:00', close: '19:00', active: true },
+        { day: 'Quarta', open: '06:00', close: '19:00', active: true },
+        { day: 'Quinta', open: '06:00', close: '19:00', active: true },
+        { day: 'Sexta', open: '06:00', close: '19:00', active: true },
+        { day: 'Sábado', open: '06:00', close: '14:00', active: true },
+        { day: 'Domingo', open: '06:00', close: '12:00', active: false }
+      ],
+      orderCounter: 1000
+    }, null, 2));
+  }
+}
+initDB();
+
 function readDB() {
   return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
 }
