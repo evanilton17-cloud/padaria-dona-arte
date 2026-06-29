@@ -3,3 +3,4 @@ uploads/*
 !uploads/.gitkeep
 fly.toml
 data/uploads/
+data/db.json
