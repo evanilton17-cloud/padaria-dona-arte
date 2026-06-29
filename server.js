@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: { directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'", "'unsafe-inline'"], styleSrc: ["'self'", "'unsafe-inline'", "https:"], imgSrc: ["'self'", "data:"], fontSrc: ["'self'", "https:", "data:"], formAction: ["'self'"], frameAncestors: ["'self'"], upgradeInsecureRequests: [] } } }));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
